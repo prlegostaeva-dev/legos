@@ -1,0 +1,185 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Николь Терновская - Продюсер</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-20">
+        <div class="container mx-auto text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                Хочешь стабильно продавать от 25 000 ₽ за сессию и масштабировать продукт до миллионов?
+            </h1>
+            <p class="text-xl md:text-2xl mb-8">
+                Стратегия, распаковка личности или продюсер в аренду — выбери свой путь к росту
+            </p>
+            <a href="https://t.me/nicole_ternovskaya" class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-200">
+                Пиши мне в Telegram
+            </a>
+        </div>
+    </section>
+
+    <!-- Pain and Dreams Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Когда продажи падают, а воронки не работают...</h2>
+            <p class="text-lg mb-4">
+                Ты эксперт, но продажи упали, а воронки не работают — это бесит. Ты мечтаешь о стабильном доходе, новых аудиториях и четком плане, но не понимаешь, с чего начать.
+            </p>
+            <p class="text-lg font-semibold">
+                Здесь нет воды — только три рабочих решения, проверенных на чеках от 399 ₽ до 1 500 000 ₽.
+            </p>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Топ-3 решения для твоего роста</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Стратегическая сессия (25 000 ₽)</h3>
+                    <p class="mb-4">За 2 часа разбираем воронку, мини-продукт или линию контента и строим четкий пошаговый план.</p>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Полноценная карта внедрения + нейросети для идеи контента.</li>
+                        <li>Готовый скелет запуска с учётом твоих ресурсов.</li>
+                    </ul>
+                    <a href="https://t.me/nicole_ternovskaya" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700">Хочу сессию!</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Распаковка личности и экспертности (15 000 ₽)</h3>
+                    <p class="mb-4">Когда бренд застыл: меняем смыслы, обновляем позиционирование, создаем новый сторителлинг.</p>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Нейросети генерируют готовые контент-линии.</li>
+                        <li>Подарю подборку моих «пранков» для вовлечения аудитории.</li>
+                    </ul>
+                    <a href="https://t.me/nicole_ternovskaya" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700">Хочу сессию!</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Продюсер в аренду / консалтинг (от 100 000 ₽)</h3>
+                    <p class="mb-4">2 месяца полного сопровождения: команда, процессы, воронки, трафик и внедрение AI.</p>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Оптимизация бюджета и ускорение запуска.</li>
+                        <li>Подключение гипотез: 1-часовое внедрение с быстрым результатом.</li>
+                    </ul>
+                    <a href="https://t.me/nicole_ternovskaya" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700">Хочу сессию!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">5 «кексов», которыми я горжусь</h2>
+            <ul class="list-disc list-inside text-lg space-y-4 mx-auto max-w-2xl">
+                <li>136 000 000 ₽ оборота за разные продукты – от чек-листов до VIP-групп.</li>
+                <li>Запуск на 22 000 000 ₽ в разгар кризиса за 7 дней.</li>
+                <li>1,4 млн ₽ за 4 дня на мини-продукте с конверсией 90%.</li>
+                <li>3 000 000 ₽ без хаоса за 1,5 месяца в роли эдвайзера.</li>
+                <li>NPS 4.8/5 на среднем курсе с 500 участниками.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Кейсы и социальное доказательство</h2>
+            <ul class="list-disc list-inside text-lg space-y-4 mx-auto max-w-2xl">
+                <li><strong>Лучший запуск:</strong> 40 млн → стартовали 22 февраля, гендерная воронка, гениальные прогревы, но NDA мешает делиться скриншотами.</li>
+                <li><strong>Гипотеза за ночь:</strong> 1 час внедрения → рекордное количество заявок.</li>
+                <li><strong>Авто-воронки в Telegram:</strong> 3500 регистраций при минимуме 5000 запланированных.</li>
+                <li><strong>Партнёрские запуски:</strong> Геймифицированные директ-воронки, реферальные программы и закуп трафика в TG-каналах.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Why Me Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Почему со мной</h2>
+            <p class="text-lg mb-4">Ты получаешь не просто советы, а внедрение «под ключ»:</p>
+            <ul class="list-disc list-inside text-lg space-y-4 mx-auto max-w-2xl">
+                <li>Опыт в оффлайн (директор клуба с 70 сотрудниками).</li>
+                <li>Работаю с чеками от 1 500 до 500 000 ₽.</li>
+                <li>Интеграция AI во все процессы.</li>
+                <li>Настоящее горение продуктом и командой.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Partnerships Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Продюсирование и выход из партнёрств</h2>
+            <p class="text-lg mb-4">Когда команда на излёте, бюджеты сливаются, а прогревы устарели — я беру проект в своё ведение и реанимирую запуск.</p>
+            <ul class="list-disc list-inside text-lg space-y-4 mx-auto max-w-2xl">
+                <li>Перестроила команду и процессы за 7 дней.</li>
+                <li>Провела 33 ночных теста и довела автооплаты до 4 млн ₽.</li>
+                <li>Реализовала стратегию «дожима» в кризис — закрытый запуск на 22 млн ₽.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-16 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Ты устал искать решения в шаблонных курсах? Пора действовать.</h2>
+            <p class="text-lg mb-4">Выбирай формат:</p>
+            <ul class="list-disc list-inside text-lg space-y-4 mx-auto max-w-2xl">
+                <li>Стратегическая сессия — 25 000 ₽</li>
+                <li>Распаковка личности — 15 000 ₽</li>
+                <li>Продюсер в аренду — от 100 000 ₽</li>
+            </ul>
+            <p class="text-xl font-semibold mt-6">Ждёшь чуда? Оно уже здесь.</p>
+            <a href="https://t.me/nicole_ternovskaya" class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 mt-4 inline-block">
+                Пиши мне прямо сейчас!
+            </a>
+            <p class="text-lg mt-4 italic">Обращайся на «ты», мы почти друзья.</p>
+        </div>
+    </section>
+</body>
+</html>
